@@ -14,35 +14,37 @@
 
 #include "lodepng-master/lodepng.h"
 #include "libheatmap-master/heatmap.h"
+#include "personProcessor.h"
 
 #define NPOINTS = 1000;
 
-int main (size_t height, size_t width, std::string file,
-                    std::vector<std::tuple<size_t, size_t>> pointList) {
+class Importer {
+  static int import(size_t height, size_t width, std::string file,
+                      std::vector<personFeature_t> personList) {
+    // Initialize the heatmap object
+    heatmap_t* hm = heatmap_new(width, height);
 
-  // Initialize the heatmap object
-  heatmap_t* hm = heatmap_new(width, height);
+    std::vector<personFeature_t>::iterator point;
+    // Add each feature point to the point cloud
+    for (point = personList.begin(); point < personList.end(); point++) {
+      personFeature_t thisPoint = *point;
+      heatmap_add_point(hm, std::get<0>(thisPoint.position),
+                            std::get<1>(thisPoint.position));
+    }
 
-  std::vector<std::tuple<size_t, size_t>>::iterator point;
-  // Add each feature point to the point cloud
-  for (point = pointList.begin(); point < pointList.end(); point++) {
-    std::tuple<size_t, size_t> thisPoint = *point;
-    heatmap_add_point(hm, std::get<0>(thisPoint),
-                          std::get<1>(thisPoint));
+    // Create image out of the heatmap
+    std::vector<unsigned char> image(width * height * 4);
+    heatmap_render_default_to(hm, &image[0]);
+
+    heatmap_free(hm);
+
+    // Export the image
+    std::cout << "Exporting to distination file: " << file;
+    if (unsigned error = lodepng::encode(file, image, width, height)) {
+      std::cerr << "encoder error" << error
+                << ": " << lodepng_error_text(error) << std::endl;
+      return 1;
+    }
+    return 0;
   }
-
-  // Create image out of the heatmap
-  std::vector<unsigned char> image(width * height * 4);
-  heatmap_render_default_to(hm, &image[0]);
-
-  heatmap_free(hm);
-
-  // Export the image
-  std::cout << "Exporting to distination file: " << file;
-  if (unsigned error = lodepng::encode(file, image, width, height)) {
-    std::cerr << "encoder error" << error
-              << ": " << lodepng_error_text(error) << std::endl;
-    return 1;
-  }
-  return 0;
-}
+};
