@@ -11,9 +11,12 @@
 // } personFeature_t;
 
 class personProcessor {
-  static personFeature_t makePerson();
-  static float getAgeSeconds(personFeature_t person);
-  static size_t getId(personFeature_t person);
-  static void setPosition(personFeature_t* person);
-  static std::tuple<size_t, size_t> getPosition(personFeature_t person);
+  public:
+    static personFeature_t makePerson();
+    static void setAgeSeconds(personFeature_t* person);
+    static float getAgeSeconds(personFeature_t person);
+    static void setId(personFeature_t* person);
+    static size_t getId(personFeature_t person);
+    static void setPosition(size_t x, size_t y, personFeature_t* person);
+    static std::tuple<size_t, size_t> getPosition(personFeature_t person);
 };
