@@ -1,0 +1,10 @@
+{
+  "alertSectors": [],
+  "topSpots": {
+    "one": 1,
+    "two": 3,
+    "three": 13
+  },
+  "averageSpeed": 1,
+  "population": 30
+}
