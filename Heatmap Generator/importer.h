@@ -6,11 +6,11 @@
 #include "personProcessor.h"
 
 class Importer {
+  public:
+    // Acquire the points for the import methodd
+    static std::vector<personFeature_t> pointExtractor(std::string source);
 
-  // Acquire the points for the import methodd
-  std::vector<personFeature_t> pointExtractor(std::string source);
-
-  // Export the importet points as a heatmap
-  static int import(size_t height, size_t width, std::string file,
-                      std::vector<personFeature_t> personList);
+    // Export the importet points as a heatmap
+    static int getHeatMap(size_t height, size_t width, std::string file,
+                        std::vector<personFeature_t> personList);
 };
