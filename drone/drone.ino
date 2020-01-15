@@ -3,8 +3,17 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
   
+//sensor
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
  
+//translational velocities
+float vx = 0;
+float vy = 0;
+float vz = 0;
+
+//starting time
+unsigned long elapsedTime = 0;
+
 void setup(void) 
 {
   Serial.begin(9600);
@@ -25,18 +34,33 @@ void setup(void)
  
 void loop(void) 
 {
-  /* Get a new sensor event */ 
+
+  //Current time, update elapsed time
+  unsigned long dt = milis() - elapsedTime;
+  elapsedTime = elapsedTime + dt;
+
+  //Get a new sensor event
   sensors_event_t event; 
   bno.getEvent(&event);
+
+  //Gather data from sensors
+  sensor_vec_t orient = event.orientation;
+  imu::Vector<3> gyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+  imu::Vector<3> linaccel = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
+
+  //refresh translational velocities using integration
+  vx += (linaccel.x() * dt);
+  vy += (linaccel.y() * dt);
+  vz += (linaccel.z() * dt);
+
   
-  /* Display the floating point data */
-  Serial.print("X: ");
-  Serial.print(event.orientation.x, 4);
-  Serial.print("\tY: ");
-  Serial.print(event.orientation.y, 4);
-  Serial.print("\tZ: ");
-  Serial.print(event.orientation.z, 4);
-  Serial.println("");
+
+  
+
+
+
+
+
   
   delay(100);
 }
