@@ -51,6 +51,8 @@ float *get_rotational_corrections
     
     float orient_err[3];
 
+    //TODO implement angle overflow
+
     //X axis error (roll)
     orient_err[0] = orient.x - orient_ref[0];
     
@@ -65,9 +67,15 @@ float *get_rotational_corrections
     float correction_torques[3];
 
     //convert radians in gyro to degrees
-    float rot_x = gyro.x() / 360.0 * 2.0 * 3.14159;
-    float rot_y = gyro.y() / 360.0 * 2.0 * 3.14159;
-    float rot_z = gyro.z() / 360.0 * 2.0 * 3.14159;
+    //gyro appears to be in degrees already
+
+    // float rot_x = gyro.x() / 360.0 * 2.0 * 3.14159;
+    // float rot_y = gyro.y() / 360.0 * 2.0 * 3.14159;
+    // float rot_z = gyro.z() / 360.0 * 2.0 * 3.14159;
+
+    float rot_x = gyro.x();
+    float rot_y = gyro.y();
+    float rot_z = gyro.z();
 
     correction_torques[0] = pd(orient_err[0], rot_x, PGAIN_X, DGAIN_X);
     correction_torques[1] = pd(orient_err[1], rot_y, PGAIN_Y, DGAIN_Y);

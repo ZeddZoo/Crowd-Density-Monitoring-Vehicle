@@ -2,7 +2,12 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
-  
+
+//define pins
+
+
+
+
 //sensor
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
  
@@ -11,8 +16,11 @@ float vx = 0;
 float vy = 0;
 float vz = 0;
 
-//starting time
-unsigned long elapsedTime = 0;
+//angle
+float th = 0;
+
+//starting time (secs)
+unsigned long elapsedTime;
 
 void setup(void) 
 {
@@ -30,13 +38,16 @@ void setup(void)
   delay(1000);
     
   bno.setExtCrystalUse(true);
+
+  //starting time (secs)
+  elapsedTime = millis() / 1000;
 }
  
 void loop(void) 
 {
 
   //Current time, update elapsed time
-  unsigned long dt = milis() - elapsedTime;
+  unsigned long dt = (millis() / 1000) - elapsedTime;
   elapsedTime = elapsedTime + dt;
 
   //Get a new sensor event
@@ -53,14 +64,7 @@ void loop(void)
   vy += (linaccel.y() * dt);
   vz += (linaccel.z() * dt);
 
-  
 
   
-
-
-
-
-
-  
-  delay(100);
+  delay(10); //100hz tasks
 }
