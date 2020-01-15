@@ -24,6 +24,7 @@ class Importer {
     static std::vector<personFeature_t> pointExtractor(std::string source) {
       std::vector<personFeature_t> persons;
       // IMPORT STUFF USING OpenCV or something
+      // SOMETHING is like the feature type?
       std::vector<SOMETHING> rawPersons = GETSOMETHING(SOMETHINGELSE);
       for (SOMETHING rawDude : rawPersons) {
         size_t x = ???;
