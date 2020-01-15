@@ -12,6 +12,7 @@
 #include <iostream>
 #include <assert.h>
 
+#include "cvInterface.h"
 #include "lodepng-master/lodepng.h"
 #include "libheatmap-master/heatmap.h"
 #include "personProcessor.h"
@@ -25,10 +26,10 @@ class Importer {
       std::vector<personFeature_t> persons;
       // IMPORT STUFF USING OpenCV or something
       // SOMETHING is like the feature type?
-      std::vector<SOMETHING> rawPersons = GETSOMETHING(SOMETHINGELSE);
-      for (SOMETHING rawDude : rawPersons) {
-        size_t x = ???;
-        size_t y = ???;
+      std::vector<cv::Point2f> rawPersons = cvInterface::getPersonPoints(source);
+      for (cv::Point2f rawDude : rawPersons) {
+        size_t x = rawDude.x;
+        size_t y = rawDude.y;
         // Create the person
         personFeature_t person;
         personProcessor::setAgeSeconds(&person);
