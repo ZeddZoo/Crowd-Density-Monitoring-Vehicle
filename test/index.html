@@ -1,0 +1,25 @@
+<style>
+    #bar {
+        width: 600px;
+        height: 600px;
+    }
+</style>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>Crowd Density Monitor</title>
+</head>
+
+<body>
+    <img id="bar" alt="Bar">
+</body>
+
+<script>
+    function refreshLoop() {
+        document.getElementById('bar').src = "bar.png?" + Math.random()
+        setTimeout(refreshLoop, 200);
+    }
+
+    refreshLoop();
+</script>
