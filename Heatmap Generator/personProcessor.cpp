@@ -5,11 +5,7 @@
 #include <tuple>
 #include <time.h>
 
-typedef struct {
-  size_t personId;
-  time_t birthTime;
-  std::tuple<size_t, size_t> position;
-} personFeature_t;
+#include "personProcessor.h"
 
 
 class personProcessor {
@@ -22,14 +18,14 @@ class personProcessor {
     // Set the birth time to be the current time
     static void setAgeSeconds(personFeature_t* person) {
       if (person != nullptr) {
-        person->birthTime = time(NULL);
+        person->ageSeconds = time(NULL);
       }
     }
 
     // Get the age of the feature in seconds
     static float getAgeSeconds(personFeature_t person) {
       time_t timer = time(NULL);
-      return difftime(timer, person.birthTime);
+      return difftime(timer, person.ageSeconds);
     }
 
     // Set the ID to be the next value

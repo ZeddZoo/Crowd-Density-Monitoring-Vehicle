@@ -2,7 +2,6 @@
     Importer takes a list of points and outputs a heatmap
     */
 
-#include "importer.cpp"
 #include "personProcessor.h"
 
 class Importer {

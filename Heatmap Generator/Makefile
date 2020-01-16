@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named cvInterface
+# Target rules for targets named feedAnalyzer
 
 # Build rule for target.
-cvInterface: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cvInterface
-.PHONY : cvInterface
+feedAnalyzer: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 feedAnalyzer
+.PHONY : feedAnalyzer
 
 # fast build rule for target.
-cvInterface/fast:
-	$(MAKE) -f CMakeFiles/cvInterface.dir/build.make CMakeFiles/cvInterface.dir/build
-.PHONY : cvInterface/fast
+feedAnalyzer/fast:
+	$(MAKE) -f CMakeFiles/feedAnalyzer.dir/build.make CMakeFiles/feedAnalyzer.dir/build
+.PHONY : feedAnalyzer/fast
 
 cvInterface.o: cvInterface.cpp.o
 
@@ -129,7 +129,7 @@ cvInterface.o: cvInterface.cpp.o
 
 # target to build an object file
 cvInterface.cpp.o:
-	$(MAKE) -f CMakeFiles/cvInterface.dir/build.make CMakeFiles/cvInterface.dir/cvInterface.cpp.o
+	$(MAKE) -f CMakeFiles/feedAnalyzer.dir/build.make CMakeFiles/feedAnalyzer.dir/cvInterface.cpp.o
 .PHONY : cvInterface.cpp.o
 
 cvInterface.i: cvInterface.cpp.i
@@ -138,7 +138,7 @@ cvInterface.i: cvInterface.cpp.i
 
 # target to preprocess a source file
 cvInterface.cpp.i:
-	$(MAKE) -f CMakeFiles/cvInterface.dir/build.make CMakeFiles/cvInterface.dir/cvInterface.cpp.i
+	$(MAKE) -f CMakeFiles/feedAnalyzer.dir/build.make CMakeFiles/feedAnalyzer.dir/cvInterface.cpp.i
 .PHONY : cvInterface.cpp.i
 
 cvInterface.s: cvInterface.cpp.s
@@ -147,7 +147,7 @@ cvInterface.s: cvInterface.cpp.s
 
 # target to generate assembly for a file
 cvInterface.cpp.s:
-	$(MAKE) -f CMakeFiles/cvInterface.dir/build.make CMakeFiles/cvInterface.dir/cvInterface.cpp.s
+	$(MAKE) -f CMakeFiles/feedAnalyzer.dir/build.make CMakeFiles/feedAnalyzer.dir/cvInterface.cpp.s
 .PHONY : cvInterface.cpp.s
 
 # Help Target
@@ -157,7 +157,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... cvInterface"
+	@echo "... feedAnalyzer"
 	@echo "... edit_cache"
 	@echo "... cvInterface.o"
 	@echo "... cvInterface.i"

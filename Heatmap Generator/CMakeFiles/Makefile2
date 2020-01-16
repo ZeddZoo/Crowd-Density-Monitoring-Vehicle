@@ -60,39 +60,39 @@ CMAKE_SOURCE_DIR = "/mnt/c/Users/Ziyi/Documents/Semester 4/Build18 - Crowd Densi
 CMAKE_BINARY_DIR = "/mnt/c/Users/Ziyi/Documents/Semester 4/Build18 - Crowd Density Monitoring Vehicle/Heatmap Generator"
 
 #=============================================================================
-# Target rules for target CMakeFiles/cvInterface.dir
+# Target rules for target CMakeFiles/feedAnalyzer.dir
 
 # All Build rule for target.
-CMakeFiles/cvInterface.dir/all:
-	$(MAKE) -f CMakeFiles/cvInterface.dir/build.make CMakeFiles/cvInterface.dir/depend
-	$(MAKE) -f CMakeFiles/cvInterface.dir/build.make CMakeFiles/cvInterface.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/mnt/c/Users/Ziyi/Documents/Semester 4/Build18 - Crowd Density Monitoring Vehicle/Heatmap Generator/CMakeFiles" --progress-num=1,2 "Built target cvInterface"
-.PHONY : CMakeFiles/cvInterface.dir/all
+CMakeFiles/feedAnalyzer.dir/all:
+	$(MAKE) -f CMakeFiles/feedAnalyzer.dir/build.make CMakeFiles/feedAnalyzer.dir/depend
+	$(MAKE) -f CMakeFiles/feedAnalyzer.dir/build.make CMakeFiles/feedAnalyzer.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/mnt/c/Users/Ziyi/Documents/Semester 4/Build18 - Crowd Density Monitoring Vehicle/Heatmap Generator/CMakeFiles" --progress-num=1,2 "Built target feedAnalyzer"
+.PHONY : CMakeFiles/feedAnalyzer.dir/all
 
 # Include target in all.
-all: CMakeFiles/cvInterface.dir/all
+all: CMakeFiles/feedAnalyzer.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/cvInterface.dir/rule: cmake_check_build_system
+CMakeFiles/feedAnalyzer.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/Ziyi/Documents/Semester 4/Build18 - Crowd Density Monitoring Vehicle/Heatmap Generator/CMakeFiles" 2
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/cvInterface.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/feedAnalyzer.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/Ziyi/Documents/Semester 4/Build18 - Crowd Density Monitoring Vehicle/Heatmap Generator/CMakeFiles" 0
-.PHONY : CMakeFiles/cvInterface.dir/rule
+.PHONY : CMakeFiles/feedAnalyzer.dir/rule
 
 # Convenience name for target.
-cvInterface: CMakeFiles/cvInterface.dir/rule
+feedAnalyzer: CMakeFiles/feedAnalyzer.dir/rule
 
-.PHONY : cvInterface
-
-# clean rule for target.
-CMakeFiles/cvInterface.dir/clean:
-	$(MAKE) -f CMakeFiles/cvInterface.dir/build.make CMakeFiles/cvInterface.dir/clean
-.PHONY : CMakeFiles/cvInterface.dir/clean
+.PHONY : feedAnalyzer
 
 # clean rule for target.
-clean: CMakeFiles/cvInterface.dir/clean
+CMakeFiles/feedAnalyzer.dir/clean:
+	$(MAKE) -f CMakeFiles/feedAnalyzer.dir/build.make CMakeFiles/feedAnalyzer.dir/clean
+.PHONY : CMakeFiles/feedAnalyzer.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/feedAnalyzer.dir/clean
 
 .PHONY : clean
 

@@ -1,14 +1,13 @@
 /*
     Process personFeatures
     */
+#include <tuple>
 
-#include "personProcessor.cpp"
-
-// typedef struct {
-//   size_t personId;
-//   size_t ageSeconds;
-//   std::tuple<size_t, size_t> position;
-// } personFeature_t;
+typedef struct {
+  size_t personId;
+  size_t ageSeconds;
+  std::tuple<size_t, size_t> position;
+} personFeature_t;
 
 class personProcessor {
   public:
