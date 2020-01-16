@@ -1,0 +1,40 @@
+<style>
+    #bar {
+        width: 600px;
+        height: 600px;
+        margin: auto;
+    }
+</style>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>Crowd Density Monitor</title>
+</head>
+
+<body>
+    <img id="display">
+    <br>
+    <input type="button" name="select" value="Heatmap" onclick="set_heatmap()">
+    <input type="button" name="select" value="Flow" onclick="set_flow()">
+</body>
+
+<script>
+    var target_image;
+
+    function set_flow() {
+        target_image = "flow.png";
+    }
+
+    function set_heatmap() {
+        target_image = "heat.png";
+    }
+
+    function refreshLoop() {
+        document.getElementById("display").src = target_image + "?" + Math.random();
+        setTimeout(refreshLoop, 200);
+    }
+
+    set_heatmap();
+    refreshLoop();
+</script>

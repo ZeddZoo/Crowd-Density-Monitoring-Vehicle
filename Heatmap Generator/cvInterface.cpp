@@ -13,12 +13,9 @@
 class cvInterface {
   public:
     // Returns a vector of all the people in the image as Point2f
-    static std::vector<cv::Point2f> getPersonPoints(std::string source) {
+    static std::vector<cv::Point2f> getPersonPoints(cv::Mat image) {
       std::vector<cv::Point2f> persons;
-      // Load in the image from the source
-      // TODO@{BEN}: Make the loading in of the image make sense
-      cv::Mat image = cv::imread(
-                cv::samples::findFile("test.jpg"), cv::IMREAD_GRAYSCALE);
+
       // Let's see if approximating heads as circles works
       std::vector<cv::Vec3f> circles;
       cv::HoughCircles(image, circles, cv::HOUGH_PROBABILISTIC, 1, image.rows/8, 200, 100, 0, 0);
