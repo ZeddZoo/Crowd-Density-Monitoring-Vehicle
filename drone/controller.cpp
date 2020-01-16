@@ -14,14 +14,16 @@
 
 
 //PD controller gains
-#define PGAIN_X 0.02
-#define DGAIN_X 0.02
+#define PGAIN_X 0.2
+#define DGAIN_X 0.2
 
-#define PGAIN_Y 0.02
-#define DGAIN_Y 0.02
+#define PGAIN_Y 0.2
+#define DGAIN_Y 0.2
 
-#define PGAIN_Z 0.02
-#define DGAIN_Z 0.02
+#define PGAIN_Z 0.2
+#define DGAIN_Z 0.2
+
+#define PGAIN_T -0.1
 
 //motor parameters  (CHANGE LATER)
 #define HOVER_TORQUE 20
@@ -45,13 +47,24 @@ float pd(float p, float d, float pgain, float dgain){
 }
 
 //correct axes to match reference orientation
-float *get_rotational_corrections
+int *get_rotational_corrections
     (sensor_vec_t orient, imu::Vector<3> gyro,
      float orient_ref[]){
     
     float orient_err[3];
 
-    //TODO implement angle overflow
+    //Angle overflow
+    if (orient.x > 180.0){
+        orient.x -= 360.0;
+    }
+
+    if (orient.y > 180.0){
+        orient.y -= 360.0;
+    }
+
+    // if (orient.z > 180.0){
+    //     orient.z -= 360.0;
+    // }
 
     //X axis error (roll)
     orient_err[0] = orient.x - orient_ref[0];
@@ -64,7 +77,7 @@ float *get_rotational_corrections
 
     //Use PD controllers, derivative values are found in the sensor feed for acceleration
 
-    float correction_torques[3];
+    int rot_corrections[3];
 
     //convert radians in gyro to degrees
     //gyro appears to be in degrees already
@@ -77,32 +90,31 @@ float *get_rotational_corrections
     float rot_y = gyro.y();
     float rot_z = gyro.z();
 
-    correction_torques[0] = pd(orient_err[0], rot_x, PGAIN_X, DGAIN_X);
-    correction_torques[1] = pd(orient_err[1], rot_y, PGAIN_Y, DGAIN_Y);
-    correction_torques[2] = pd(orient_err[2], rot_z, PGAIN_Z, DGAIN_Z);
+    rot_corrections[0] = (int)(pd(orient_err[0], rot_x, PGAIN_X, DGAIN_X));
+    rot_corrections[1] = (int)(pd(orient_err[1], rot_y, PGAIN_Y, DGAIN_Y));
+    rot_corrections[2] = (int)(pd(orient_err[2], rot_z, PGAIN_Z, DGAIN_Z));
 
-    return correction_torques;
+    return rot_corrections;
+}
+
+int get_hover_corrections(float vz, float vz_ref){
+    return (vz - vz_ref) * PGAIN_T;
 }
 
 //mix motors with base velocity for hover and bias to remove XYZ axis rotation errors, altitude bias
-float mix_motors(float hover, float rot_corrections[], float hover_corrections[]) {
 
-    float total_corrections[3];
+//TODO: calibrate values
 
-    for (int i = 0; i < 3; i++){
-        total_corrections[i] = rot_corrections[i] + alt_corrections;
-    }
+float mix_motors(int hover, int rot_corrections[], int hover_corrections) {
 
-    for (int i = 0; i < 4; i++){
-        base[i] = hover + hover_corrections[i];
-    }
+    int base = hover + hover_corrections;
 
-    float motor_torques[4];
+    int motor_torques[4];
 
-    motor_torques[0] = base[0] + total_corrections[0] + total_corrections[1] + total_corrections[2];
-    motor_torques[1] = base[1] - total_corrections[0] + total_corrections[1] - total_corrections[2];
-    motor_torques[2] = base[2] + total_corrections[0] - total_corrections[1] - total_corrections[2];
-    motor_torques[3] = base[3] - total_corrections[0] - total_corrections[1] + total_corrections[2];
+    motor_torques[0] = base + rot_corrections[0] + rot_corrections[1] + rot_corrections[2];
+    motor_torques[1] = base - rot_corrections[0] + rot_corrections[1] - rot_corrections[2];
+    motor_torques[2] = base + rot_corrections[0] - rot_corrections[1] - rot_corrections[2];
+    motor_torques[3] = base - rot_corrections[0] - rot_corrections[1] + rot_corrections[2];
 
     return motor_torques;
 }
