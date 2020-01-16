@@ -1,4 +1,5 @@
 #include <Wire.h>
+#include <Servo.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
@@ -7,19 +8,31 @@
 #include "commands.h"
 
 //define pins
-#define CAM_TILT_PIN
-#define CAM_PAN_PIN
 
+//camera mount
+#define CAM_PAN_PIN 7
+#define CAM_TILT_PIN 8
+
+//motors
 #define M1_PIN
 #define M2_PIN
 #define M3_PIN
 #define M4_PIN
 
+//status toggle
 #define STAT_TOGGLE_PIN
 
 
-//sensor
+//sensor init
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
+
+//servos init
+Servo pan;
+Servo tilt;
+
+//servo angles
+int pan_angle;
+int tilt_angle;
  
 //translational velocities
 float vx = 0;
@@ -56,6 +69,14 @@ void setup(void)
   delay(1000);
     
   bno.setExtCrystalUse(true);
+
+  //initialize servos
+  pan.attach(CAM_PAN_PIN);
+  tilt.attach(CAM_TILT_PIN);
+
+  //get servo initial positions
+  pan_angle = pan.read();
+  tilt_angle = tilt.read();
 
   //starting time (secs)
   elapsedTime = millis() / 1000;
@@ -131,6 +152,32 @@ void loop(void)
     analogWrite(M3_PIN, 0);
     analogWrite(M4_PIN, 0);
   }
+  //move servos to their position
+  
+  //read commands: TODO Implement
+  int camera_commands[2];
+  //read commands
+
+
+  //change pan angle
+  if (camera_commands[0] < 0){
+    pan_angle -= 5;
+  }
+  else if (camera_commands[0] > 0){
+    pan_angle += 5;
+  }
+
+  //change tilt angle
+  if (camera_commands[1] < 0){
+    tilt_angle -= 5;
+  }
+  else if (camera_commands[1] > 0){
+    tilt_angle += 5;
+  }
+
+  //command servo motors
+  pan.write(pan_angle);
+  tilt.write(tilt_angle);
 
   //read stationary flag toggle, change if needed
   if (digitalRead(STAT_TOGGLE_PIN) == HIGH){
