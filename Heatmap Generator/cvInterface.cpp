@@ -11,6 +11,9 @@
 
 #define TODISP image
 
+const float inlier_threshold = 2.5f; // Distance threshold to identify inliers with homography check
+const float nn_match_ratio = 0.8f;   // Nearest neighbor matching ratio
+
 // #include "opencv/modules/features2d/include/opencv2/features2d.hpp"
 // #include "opencv/modules/highgui/include/opencv2/highgui.hpp"
 // #include "opencv/modules/imgproc/include/opencv2/imgproc.hpp"
@@ -99,10 +102,94 @@ class cvInterface {
 
       cv::waitKey(0);
     }
+
+    static std::vector<cv::Vec2f> getMovements(std::string source, cv::Mat* prevFrame) {
+                                              //  std::vector<cv::KeyPoint> prevKeyFrame) {
+      std::vector<cv::Vec2f> movements;
+      // Load in the new image
+      cv::Mat image = cv::imread(
+                cv::samples::findFile("mvt2.jpg"), cv::IMREAD_COLOR);
+      cv::Mat original = image.clone();
+
+      cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
+      cv::Canny(image, image, 100, 200);
+      cv::Mat temp = *prevFrame;
+
+      cv::cvtColor(temp, temp, cv::COLOR_BGR2GRAY);
+      cv::Canny(temp, temp, 100, 200);
+      cv::Mat toSub = image.clone();
+      cv::subtract(temp, image, image);
+      cv::subtract(toSub, temp, temp);
+      *prevFrame = temp;
+
+      cv::Mat homography;
+      // cv::FileStorage fs(cv::samples::findFile(std::parser.get<String>("@homography") ), cv::FileStorage::READ);
+      // fs.getFirstTopLevelNode() >> homography;
+
+      std::vector<cv::KeyPoint> kpts1, kpts2;
+      cv::Mat desc1, desc2;
+
+      cv::Ptr<cv::AKAZE> akazeTool = cv::AKAZE::create();
+      akazeTool->detectAndCompute(image, cv::noArray(), kpts1, desc1);
+      akazeTool->detectAndCompute(*prevFrame, cv::noArray(), kpts2, desc2);
+
+      cv::BFMatcher matcher(cv::NORM_L1);
+      std::vector<std::vector<cv::DMatch>> nn_matches;
+      matcher.knnMatch(desc1, desc2, nn_matches, 2);
+
+      std::vector<cv::KeyPoint> matched1, matched2;
+      for (size_t i = 0; i < nn_matches.size(); ++i) {
+        cv::DMatch first = nn_matches[i][0];
+        float dist1 = nn_matches[i][0].distance;
+        float dist2 = nn_matches[i][1].distance;
+        if(dist1 < nn_match_ratio * dist2) {
+            matched1.push_back(kpts1[first.queryIdx]);
+            matched2.push_back(kpts2[first.trainIdx]);
+        }
+      }
+
+      std::vector<cv::DMatch> goodMatches;
+      std::vector<cv::KeyPoint> inliers1, inliers2;
+      for (size_t i = 0; i < matched1.size(); i++) {
+        cv::Mat col = cv::Mat::ones(3, 1, CV_64F);
+        col.at<double>(0) = matched1[i].pt.x;
+        col.at<double>(1) = matched1[i].pt.y;
+
+        // col = homography * col;
+        col /= col.at<double>(2);
+        double dist = sqrt(pow(col.at<double>(0) - matched2[i].pt.x, 2) +
+                          pow(col.at<double>(1) - matched2[i].pt.y, 2));
+
+        if (1.5f < dist < inlier_threshold) {
+          int new_i = static_cast<int>(inliers1.size());
+          inliers1.push_back(matched1[i]);
+          inliers2.push_back(matched2[i]);
+          goodMatches.push_back(cv::DMatch(new_i, new_i, 0));
+        }
+      }
+      cv::Mat res;
+      cv::drawMatches(image, inliers1, *prevFrame, inliers2, goodMatches, res);
+      imwrite("akaze_result.png", res);
+      double inlier_ratio = inliers1.size() / (double) matched1.size();
+      std::cout << "A-KAZE Matching Results" << std::endl;
+      std::cout << "*******************************" << std::endl;
+      std::cout << "# Keypoints 1:                        \t" << kpts1.size() << std::endl;
+      std::cout << "# Keypoints 2:                        \t" << kpts2.size() << std::endl;
+      std::cout << "# Matches:                            \t" << matched1.size() << std::endl;
+      std::cout << "# Inliers:                            \t" << inliers1.size() << std::endl;
+      std::cout << "# Inliers Ratio:                      \t" << inlier_ratio << std::endl;
+      std::cout << std::endl;
+      imshow("result", res);
+      *prevFrame = original;
+      cv::waitKey();
+    }
+
 };
 
 int main() {
   cv::Mat tenSecDiff = cv::imread(
-                cv::samples::findFile("test6HD.jpg"), cv::IMREAD_COLOR);
-  cvInterface::getPersonPoints("hello", tenSecDiff);
+                cv::samples::findFile("mvt1.jpg"), cv::IMREAD_COLOR);
+  // cvInterface::getPersonPoints("hello", tenSecDiff);
+  cvInterface::getMovements("hello", &tenSecDiff);
+
 }

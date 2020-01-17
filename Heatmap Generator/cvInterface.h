@@ -11,4 +11,5 @@ class cvInterface {
 
     // Returns a vector of all the diff'd feature points
     // static std::vector<
+    static std::vector<cv::Vec2f> getMovements(std::string source, cv::Mat prevFrame);
 };
